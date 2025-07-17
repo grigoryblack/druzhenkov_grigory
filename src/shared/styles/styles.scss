@@ -1,0 +1,43 @@
+/* Цвета */
+$primaryColor: #2F0101;
+$lightThemeColor: white;
+$darkThemeColor: black;
+
+/* Размеры для адаптива */
+$sm: 320px;
+$md: 768px;
+$lg: 1024px;
+$xlg: 1440px;
+
+/* Шрифты */
+@mixin font-title {
+  font-size: 4rem;
+}
+
+@mixin font-title-mobile {
+  font-size: 3rem;
+}
+
+@mixin font-subtitle {
+  font-size: 3rem;
+}
+
+@mixin font-subtitle-mobile {
+  font-size: 2rem;
+}
+
+@mixin bitText {
+  font-size: 1.5rem;
+}
+
+@mixin defaultText {
+  font-size: 1rem;
+}
+
+@mixin smallText {
+  font-size: 0.75rem;
+}
+
+@mixin miniText {
+  font-size: 0.5rem;
+}

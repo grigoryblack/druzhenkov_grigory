@@ -1,0 +1,25 @@
+@use "@styles/styles" as *;
+
+.wrapper {
+  width: 100dvw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100dvh;
+
+  .container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    max-width: 1300px;
+    width: 100%;
+    padding: 0 1rem;
+    z-index: 1;
+    background-color: $darkThemeColor;
+
+    h1 {
+      text-align: center;
+      @include font-title;
+    }
+  }
+}

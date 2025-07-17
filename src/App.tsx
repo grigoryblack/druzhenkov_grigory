@@ -1,8 +1,9 @@
-function App() {
+import Header from './widgets/Header';
 
+function App() {
   return (
     <>
-      hello
+      <Header />
     </>
   );
 }
