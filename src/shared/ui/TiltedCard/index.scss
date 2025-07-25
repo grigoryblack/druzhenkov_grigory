@@ -1,0 +1,30 @@
+.tilted-card {
+  position: relative;
+  width: fit-content;
+  height: fit-content;
+  transition: transform 0.3s ease-out;
+  transform-style: preserve-3d;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  will-change: transform;
+}
+
+.tilted-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+                  to right,
+                  rgba(255, 255, 255, 0.2) 0%,
+                  rgba(255, 255, 255, 0) 20%,
+                  rgba(255, 255, 255, 0) 80%,
+                  rgba(255, 255, 255, 0.2) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}

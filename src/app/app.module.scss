@@ -1,0 +1,139 @@
+@use "@styles/styles" as *;
+
+.scrollContainer {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sectionsWrapper {
+  height: 100%;
+  width: 100%;
+  transition: transform 0.6s ease-out;
+}
+
+.section {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  &.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Индикатор прогресса - мобильная версия
+.progressIndicator {
+  position: fixed;
+  right: 12px;
+  top: 0;
+  transform: translateY(50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 100;
+}
+
+.indicatorDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba($darkThemeColor, 0.4);
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.active {
+    background-color: $darkThemeColor;
+    transform: scale(1.2);
+  }
+}
+
+// Кнопки навигации - мобильная версия
+.navButton {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: $darkThemeColor;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+  backdrop-filter: blur(2px);
+
+  &:active {
+    transform: translateX(-50%) scale(0.95);
+  }
+
+  &:disabled {
+    opacity: 0.2;
+    cursor: not-allowed;
+  }
+
+  &.up {
+    top: 10px;
+  }
+
+  &.down {
+    bottom: 10px;
+  }
+}
+
+// Десктопные стили
+@media (min-width: $md) {
+  .sectionsWrapper {
+    transition: transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+  }
+
+  .section {
+    transform: translateY(20px);
+    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+  }
+
+  .progressIndicator {
+    right: 20px;
+    gap: 12px;
+  }
+
+  .indicatorDot {
+    width: 10px;
+    height: 10px;
+
+    &.active {
+      transform: scale(1.3);
+    }
+  }
+
+  .navButton {
+    width: 50px;
+    height: 50px;
+    display: flex;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.25);
+      opacity: 1;
+    }
+
+    &.up {
+      top: 20px;
+    }
+
+    &.down {
+      bottom: 20px;
+    }
+  }
+}

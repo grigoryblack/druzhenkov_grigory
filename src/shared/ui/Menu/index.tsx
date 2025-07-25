@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import styles from './Menu.module.scss';
 import { CloseOutlined, MenuOutlined } from '@ant-design/icons';
 
-const Menu = () => {
+interface MenuProps {
+  handleAnchorClick: (e: React.MouseEvent, id: string) => void;
+}
+
+const Menu = ({ handleAnchorClick }: MenuProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -12,8 +16,6 @@ const Menu = () => {
   const menuItems = [
     { label: 'Главная', value: 'home' },
     { label: 'Обо мне', value: 'about' },
-    { label: 'Портфолио', value: 'portfolio' },
-    { label: 'Контакты', value: 'contacts' },
   ];
 
   const closeMenu = () => {
@@ -58,7 +60,14 @@ const Menu = () => {
           <ul>
             {menuItems.map((item, index) => (
               <li key={index}>
-                <a href={`#${item.value}`} onClick={toggleMenu}>
+                <a
+                  href={`#${item.value}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleAnchorClick(e, item.value);
+                    setTimeout(() => toggleMenu(), 300);
+                  }}
+                >
                   {item.label}
                 </a>
               </li>

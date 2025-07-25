@@ -47,7 +47,7 @@
   font-style: normal;
 }
 
-/* Reset styles */
+/* Убираем отступы, padding и box-sizing */
 *,
 *::before,
 *::after {
@@ -56,31 +56,9 @@
   box-sizing: border-box;
 }
 
-html {
-  -webkit-text-size-adjust: 100%;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  min-height: 100vh;
-  line-height: 1;
-  -webkit-font-smoothing: antialiased;
-}
-
-img, picture, video, canvas, svg {
-  display: block;
-  max-width: 100%;
-}
-
-input, button, textarea, select {
-  font: inherit;
-}
-
-p, h1, h2, h3, h4, h5, h6 {
-  overflow-wrap: break-word;
-}
-
-ol, ul {
+/* Убираем стандартные стили для списков и ссылок */
+ul,
+ol {
   list-style: none;
 }
 
@@ -89,23 +67,81 @@ a {
   color: inherit;
 }
 
-button {
-  background: none;
-  border: none;
-  cursor: pointer;
+/* Задаем базовые стили для body */
+body,
+html {
+  font-size: 16px;
+  line-height: 1.5;
+  scroll-behavior: smooth;
+  margin: 0;
   padding: 0;
+  font-family: 'Raleway', sans-serif;
 }
 
+/* Задаем стандартное поведение для изображений */
+img,
+picture {
+  max-width: 100%;
+  display: block;
+}
+
+/* Убираем стили по умолчанию для таблиц */
 table {
   border-collapse: collapse;
   border-spacing: 0;
 }
 
-:focus {
-  outline: 0;
+/* Устанавливаем нулевые поля для форм и инпутов */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  outline: none;
+  border: none;
+  background: none;
+  margin: 0;
+  padding: 0;
 }
 
-/* Optional: Set base font family */
+/* Убираем стандартные стили кнопок */
+button {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+/* Устанавливаем базовые стили для заголовков */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+/* Убираем обводку при фокусе, если это не клавиатурное событие */
+:focus-visible {
+  outline: none;
+}
+
+/* Кастомизация скролбара */
+::-webkit-scrollbar {
+  width: 3px; /* Ширина вертикального скролбара */
+}
+
+/* Кастомизация фона скроллбара */
+::-webkit-scrollbar-track {
+  background-color: white; /* Цвет фона скроллбара */
+}
+
+/* Кастомизация движущейся части (ползунка) скроллбара */
+::-webkit-scrollbar-thumb {
+  background-color: #222127; /* Цвет ползунка */
+  transition: background-color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
 body {
-  font-family: "Raleway", sans-serif;
+  overflow-x: hidden; /* Скрываем горизонтальный скроллбар */
 }

@@ -1,7 +1,7 @@
 @use "@styles/styles" as *;
 
 .wrapper {
-  width: 100dvw;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,9 +11,9 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    max-width: 1300px;
+    max-width: $xlg;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0 3rem;
     z-index: 1;
     background-color: $darkThemeColor;
 

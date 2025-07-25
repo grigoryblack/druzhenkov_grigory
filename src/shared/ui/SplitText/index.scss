@@ -1,0 +1,30 @@
+.split-text-container {
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: bold;
+  overflow: hidden;
+}
+
+.split-text-letter {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(100%);
+
+  &.animate {
+    animation: split-text-animation 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+  }
+}
+
+@keyframes split-text-animation {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

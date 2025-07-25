@@ -220,6 +220,7 @@ const TextPressure: React.FC<TextPressureProps> = ({
         {chars.map((char, i) => (
           <span
             key={i}
+            // @ts-ignore
             ref={(el) => (spansRef.current[i] = el)}
             data-char={char}
             style={{
