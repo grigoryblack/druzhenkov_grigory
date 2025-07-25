@@ -30,6 +30,9 @@ const About = () => {
           </div>
 
           <div className={styles.education}>
+            <div className={styles.title__desctop}>
+              <SplitTextAnimation text="Who am I?" delay={0.03} threshold={0.3} />
+            </div>
             <h3>Education</h3>
 
             <p>
@@ -47,6 +50,9 @@ const About = () => {
               <span>November 2021 — July 2024</span>
               <span>Troops: Air Defense, Lieutenant</span>
             </p>
+
+            <h3>Work now</h3>
+            <p><a className={styles.accent} href={"https://callibri.ru/"} target={"_blank"}>Callibri</a> — services for automating work with leads at all stages of the funnel.</p>
           </div>
         </div>
       </div>

@@ -15,8 +15,14 @@
     padding: 0.5rem;
     gap: 2rem;
 
-    .title{
+    .title {
+      display: block;
       margin-left: 0.5rem;
+
+      &__desctop {
+        display: none;
+        padding-top: 1rem;
+      }
     }
 
     &__info {
@@ -45,6 +51,10 @@
         h3 {
           @include bitText;
           font-weight: 600;
+
+          &:last-of-type {
+            margin-top: 1rem;
+          }
         }
 
         p {
@@ -54,6 +64,32 @@
 
           span {
             font-weight: 600;
+          }
+
+          .accent {
+            margin-top: 0.5rem;
+            color: black;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            background-color: #F6CA45;
+            width: fit-content;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            animation: levitate 2s ease-in-out infinite;
+
+            @keyframes levitate {
+              0%, 100% {
+                transform: translateY(0);
+              }
+              50% {
+                transform: translateY(-0.5rem);
+              }
+            }
+
+            &:hover {
+              animation: none; /* Отключаем анимацию при наведении */
+              transform: translateY(-2px);
+            }
           }
         }
       }
@@ -73,6 +109,7 @@
 
           p {
             @include defaultText;
+
             span {
               font-weight: 600;
             }
@@ -99,11 +136,6 @@
           flex: 0 0 auto;
           width: 100%;
           min-width: 300px;
-
-          h3 {
-            @include bitText;
-            font-weight: 600;
-          }
 
           p {
             @include defaultText;
@@ -147,6 +179,15 @@
 @media (min-width: $lg) {
   .wrapper {
     .container {
+
+      .title {
+        display: none;
+
+        &__desctop {
+          display: block;
+        }
+      }
+
       &__info {
         display: flex;
         flex-direction: row-reverse;
@@ -159,11 +200,6 @@
           flex: 1;
           min-width: 0;
           max-width: 50%;
-
-          h3 {
-            @include bitText;
-            font-weight: 600;
-          }
 
           p {
             @include defaultText;
