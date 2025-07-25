@@ -2,13 +2,14 @@ import styles from './About.module.scss';
 import SplitTextAnimation from '@ui/SplitText';
 import TiltedCard from '@ui/TiltedCard';
 import myself from '../../assets/img/myself.webp';
-import MagnetLines from '@ui/MagnetLines';
 
 const About = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.container}>
-        <SplitTextAnimation text="Who am I?" delay={0.03} threshold={0.3} />
+        <div className={styles.title}>
+          <SplitTextAnimation text="Who am I?" delay={0.03} threshold={0.3} />
+        </div>
 
         <div className={styles.container__info}>
           <div lang={styles.card__wrapper}>

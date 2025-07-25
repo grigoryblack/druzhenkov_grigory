@@ -12,8 +12,12 @@
     align-items: flex-start;
     max-width: $xlg;
     width: 100%;
-    padding: 0 1rem;
+    padding: 0.5rem;
     gap: 2rem;
+
+    .title{
+      margin-left: 0.5rem;
+    }
 
     &__info {
       display: flex;
