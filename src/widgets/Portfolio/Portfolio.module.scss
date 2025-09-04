@@ -1,5 +1,41 @@
 @use "@styles/styles" as *;
 
+.modal__wrapper {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 1rem;
+  box-sizing: border-box;
+
+  .img {
+    width: 100%;
+    object-fit: cover;
+    margin-top: 1rem;
+  }
+
+  .link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $primaryColor;
+    position: relative;
+    text-decoration: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      height: 2px;
+      width: 0;
+      background-color: $primaryColor;
+      transition: width 0.3s ease;
+    }
+
+    &:hover::before {
+      width: 100%;
+    }
+  }
+}
+
 .wrapper {
   width: 100%;
   display: flex;
@@ -30,7 +66,7 @@
       /* Новое: центрирование содержимого */
       display: flex;
       justify-content: center; /* горизонтально */
-      align-items: flex-end;     /* вертикально */
+      align-items: flex-end; /* вертикально */
     }
   }
 }

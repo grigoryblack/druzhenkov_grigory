@@ -7,6 +7,7 @@ export interface GlassIconsItem {
   color: string;
   label: string;
   customClass?: string;
+  onClick?: () => void; // добавляем поддержку клика
 }
 
 export interface GlassIconsProps {
@@ -27,6 +28,7 @@ const GlassIcons: React.FC<GlassIconsProps> = ({ items, className }) => {
           aria-label={item.label}
           onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
+          onClick={item.onClick}
         >
           <span className="icon-btn__back"></span>
           <span className="icon-btn__front">

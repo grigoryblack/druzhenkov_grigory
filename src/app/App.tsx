@@ -1,3 +1,4 @@
+'use client';
 import { useState, useEffect, useRef } from 'react';
 import Header from '@/widgets/Header';
 import Menu from '@ui/Menu';
@@ -9,6 +10,7 @@ import Portfolio from '@/widgets/Portfolio';
 
 function App() {
   const [currentSection, setCurrentSection] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false); // состояние модалки
   const isAnimatingRef = useRef(false);
   const touchStartY = useRef<number>(0);
 
@@ -16,10 +18,11 @@ function App() {
     { id: 'home', component: <Header key="header" /> },
     { id: 'about', component: <About key="about" /> },
     { id: 'skills', component: <Skills key="skills" /> },
-    { id: 'portfolio', component: <Portfolio key="portfolio" /> },
+    { id: 'portfolio', component: <Portfolio key="portfolio" setIsModalOpen={setIsModalOpen} /> },
   ];
 
   const currentSectionRef = useRef(currentSection);
+
   useEffect(() => {
     currentSectionRef.current = currentSection;
     history.replaceState(null, '', `#${sections[currentSection].id}`);
@@ -31,7 +34,6 @@ function App() {
     if (sectionIndex >= 0) setCurrentSection(sectionIndex);
   }, []);
 
-  // Переход к секции
   const goToSection = (index: number) => {
     if (index < 0 || index >= sections.length || isAnimatingRef.current) return;
     isAnimatingRef.current = true;
@@ -41,19 +43,22 @@ function App() {
   const goToNext = () => goToSection(currentSectionRef.current + 1);
   const goToPrev = () => goToSection(currentSectionRef.current - 1);
 
-  // Wheel и Touch
+  // Скролл колесом
   const handleWheel = (e: WheelEvent) => {
+    if (isModalOpen) return; // блокируем секции, если модалка открыта
     e.preventDefault();
     if (isAnimatingRef.current) return;
     e.deltaY > 0 ? goToNext() : goToPrev();
   };
 
+  // Скролл тачем
   const handleTouchStart = (e: TouchEvent) => {
+    if (isModalOpen) return;
     touchStartY.current = e.touches[0].clientY;
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
-    if (isAnimatingRef.current) return;
+    if (isModalOpen || isAnimatingRef.current) return;
     const diff = touchStartY.current - e.changedTouches[0].clientY;
     if (Math.abs(diff) > 50) {
       diff > 0 ? goToNext() : goToPrev();
@@ -62,14 +67,14 @@ function App() {
 
   useEffect(() => {
     window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart);
+    window.addEventListener('touchstart', handleTouchStart, { passive: false });
     window.addEventListener('touchend', handleTouchEnd);
     return () => {
       window.removeEventListener('wheel', handleWheel);
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [isModalOpen]);
 
   const handleTransitionEnd = () => {
     isAnimatingRef.current = false;
