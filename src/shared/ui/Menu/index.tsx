@@ -14,8 +14,9 @@ const Menu = ({ handleAnchorClick }: MenuProps) => {
   };
 
   const menuItems = [
-    { label: 'Главная', value: 'home' },
-    { label: 'Обо мне', value: 'about' },
+    { label: 'Main', value: 'home' },
+    { label: 'About me', value: 'about' },
+    { label: 'Skills', value: 'skills' },
   ];
 
   const closeMenu = () => {
