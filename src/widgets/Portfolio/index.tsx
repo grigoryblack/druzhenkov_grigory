@@ -25,16 +25,22 @@ const Portfolio = ({ setIsModalOpen }: PortfolioProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const handleIconClick = (label: string) => {
-    const project = projectsConfig.find((p) => p.name === label) || null;
-    setSelectedProject(project);
+    // Сначала сбросим проект
+    setSelectedProject(null);
     setModalOpen(true);
-    setIsModalOpen(true); // уведомляем App о модалке
+    setIsModalOpen(true);
+
+    // Немного задержим обновление выбранного проекта, чтобы React пересоздал компонент
+    setTimeout(() => {
+      const project = projectsConfig.find((p) => p.name === label) || null;
+      setSelectedProject(project);
+    }, 0);
   };
 
   const handleCloseModal = () => {
     setModalOpen(false);
     setSelectedProject(null);
-    setIsModalOpen(false); // уведомляем App, что модалка закрыта
+    setIsModalOpen(false);
   };
 
   const ICONS_WITH_CLICK = ICON_CONSTANT.map((item) => ({
@@ -52,25 +58,20 @@ const Portfolio = ({ setIsModalOpen }: PortfolioProps) => {
       </div>
 
       <Modal
+        key={selectedProject?.name} // ключ для полного пересоздания контента при смене проекта
         title={selectedProject?.name}
         open={modalOpen}
         onCancel={handleCloseModal}
         footer={null}
         width={800}
       >
-        {selectedProject && (
+        {selectedProject ? (
           <div ref={modalRef} className={styles.modal__wrapper}>
             <p>{selectedProject.description}</p>
-            {selectedProject?.src && (
+            {selectedProject.src && (
               <picture className={styles.imgWrapper}>
-                {selectedProject.webpSrc && (
-                  <source srcSet={selectedProject.webpSrc} type="image/webp" />
-                )}
-                <img
-                  src={selectedProject.src}
-                  alt={selectedProject.name}
-                  className={styles.img}
-                />
+                {selectedProject.webpSrc && <source srcSet={selectedProject.webpSrc} type="image/webp" />}
+                <img src={selectedProject.src} alt={selectedProject.name} className={styles.img} />
               </picture>
             )}
             <div className={styles.text} dangerouslySetInnerHTML={{ __html: selectedProject.experience }} />
@@ -85,6 +86,8 @@ const Portfolio = ({ setIsModalOpen }: PortfolioProps) => {
               </a>
             )}
           </div>
+        ) : (
+          <div className={styles.modal__loader}>Loading...</div>
         )}
       </Modal>
     </section>
