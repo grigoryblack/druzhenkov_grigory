@@ -5,6 +5,7 @@ import About from '@/widgets/About';
 import Skills from '@/widgets/Skills';
 import styles from './app.module.scss';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
+import Portfolio from '@/widgets/Portfolio';
 
 function App() {
   const [currentSection, setCurrentSection] = useState<number>(0);
@@ -15,16 +16,15 @@ function App() {
     { id: 'home', component: <Header key="header" /> },
     { id: 'about', component: <About key="about" /> },
     { id: 'skills', component: <Skills key="skills" /> },
+    { id: 'portfolio', component: <Portfolio key="portfolio" /> },
   ];
 
-  // Сохраняем currentSection в реф для обработчиков
   const currentSectionRef = useRef(currentSection);
   useEffect(() => {
     currentSectionRef.current = currentSection;
     history.replaceState(null, '', `#${sections[currentSection].id}`);
   }, [currentSection]);
 
-  // Инициализация по хэшу
   useEffect(() => {
     const hash = window.location.hash.replace('#', '');
     const sectionIndex = sections.findIndex((section) => section.id === hash);
@@ -71,7 +71,6 @@ function App() {
     };
   }, []);
 
-  // Сброс анимации по завершению CSS transition
   const handleTransitionEnd = () => {
     isAnimatingRef.current = false;
   };
