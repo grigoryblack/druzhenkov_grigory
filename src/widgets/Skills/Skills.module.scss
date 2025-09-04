@@ -17,6 +17,10 @@
     padding: 0.5rem;
     gap: 2rem;
 
+    @media (min-width: $lg) {
+      padding: 0.5rem 2rem;
+    }
+
     &__info {
       display: flex;
       flex-direction: column;
