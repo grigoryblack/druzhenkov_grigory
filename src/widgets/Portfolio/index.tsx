@@ -61,14 +61,19 @@ const Portfolio = ({ setIsModalOpen }: PortfolioProps) => {
         {selectedProject && (
           <div ref={modalRef} className={styles.modal__wrapper}>
             <p>{selectedProject.description}</p>
-            {selectedProject.src && (
-              <img
-                src={selectedProject.src}
-                alt={selectedProject.name}
-                className={styles.img}
-              />
+            {selectedProject?.src && (
+              <picture className={styles.imgWrapper}>
+                {selectedProject.webpSrc && (
+                  <source srcSet={selectedProject.webpSrc} type="image/webp" />
+                )}
+                <img
+                  src={selectedProject.src}
+                  alt={selectedProject.name}
+                  className={styles.img}
+                />
+              </picture>
             )}
-            <div dangerouslySetInnerHTML={{ __html: selectedProject.experience }} />
+            <div className={styles.text} dangerouslySetInnerHTML={{ __html: selectedProject.experience }} />
             {selectedProject.link && (
               <a
                 href={selectedProject.link}
