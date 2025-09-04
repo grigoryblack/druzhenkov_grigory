@@ -16,7 +16,7 @@ function App() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const SCROLL_THRESHOLD = 30; // порог колесика
-  const TOUCH_THRESHOLD = 80;  // порог для тача
+  const TOUCH_THRESHOLD = 80; // порог для тача
 
   const sections = [
     { id: 'home', component: <Header key="header" /> },
@@ -67,28 +67,30 @@ function App() {
 
   // Скролл колесом
   const handleWheel = (e: WheelEvent) => {
-    if (isModalOpen) return;
-    e.preventDefault();
-    if (isAnimatingRef.current || Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
+    if (isModalOpen || isAnimatingRef.current) return;
 
     const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
     if (!section) return;
 
-    if (e.deltaY > 0) {
-      // вниз
-      if (isAtBottom()) {
-        goToNext();
-      } else {
-        section.scrollBy({ top: e.deltaY, behavior: 'smooth' });
-      }
-    } else {
-      // вверх
-      if (isAtTop()) {
-        goToPrev();
-      } else {
-        section.scrollBy({ top: e.deltaY, behavior: 'smooth' });
+    // Найти вложенный скролл внутри секции
+    const scrollable = section.querySelector<HTMLElement>('[data-scrollable]');
+
+    if (scrollable) {
+      const atBottom =
+        scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 5;
+      const atTop = scrollable.scrollTop <= 5;
+
+      if ((e.deltaY > 0 && !atBottom) || (e.deltaY < 0 && !atTop)) {
+        // Если внутри блока есть прокрутка и мы не долистали до конца/верха
+        scrollable.scrollBy({ top: e.deltaY, behavior: 'smooth' });
+        e.preventDefault();
+        return; // НЕ триггерим переход на следующую секцию
       }
     }
+
+    // Если внутреннего скролла нет или долистали до конца → переключаем секцию
+    if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
+    e.deltaY > 0 ? goToNext() : goToPrev();
   };
 
   // Скролл тачем
@@ -99,20 +101,26 @@ function App() {
 
   const handleTouchEnd = (e: TouchEvent) => {
     if (isModalOpen || isAnimatingRef.current) return;
-    const diff = touchStartY.current - e.changedTouches[0].clientY;
 
+    const diff = touchStartY.current - e.changedTouches[0].clientY;
     const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
     if (!section) return;
 
-    if (diff > TOUCH_THRESHOLD) {
-      // свайп вверх → листаем вниз
-      if (isAtBottom()) goToNext();
-      else section.scrollBy({ top: diff, behavior: 'smooth' });
-    } else if (diff < -TOUCH_THRESHOLD) {
-      // свайп вниз → листаем вверх
-      if (isAtTop()) goToPrev();
-      else section.scrollBy({ top: diff, behavior: 'smooth' });
+    const scrollable = section.querySelector<HTMLElement>('[data-scrollable]');
+    if (scrollable) {
+      const atBottom =
+        scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 5;
+      const atTop = scrollable.scrollTop <= 5;
+
+      if ((diff > 0 && !atBottom) || (diff < 0 && !atTop)) {
+        scrollable.scrollBy({ top: diff, behavior: 'smooth' });
+        return; // НЕ переключаем секцию
+      }
     }
+
+    // Переход между секциями, если долистали
+    if (diff > TOUCH_THRESHOLD) goToNext();
+    else if (diff < -TOUCH_THRESHOLD) goToPrev();
   };
 
   useEffect(() => {

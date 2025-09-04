@@ -30,8 +30,10 @@ const Skills = () => {
       <div className={styles.container}>
         <SplitTextAnimation text="Skills" delay={0.03} threshold={0.3} />
 
-        {/* Список навыков */}
-        <div className={`${styles.container__info} ${showAll ? styles.scrollable : ''}`}>
+        <div
+          data-scrollable={showAll ? true : undefined}
+          className={`${styles.container__info} ${showAll ? styles.scrollable : ''}`}
+        >
           {visibleSkills.map((skill: TSkill) => (
             <div
               key={skill.id}
