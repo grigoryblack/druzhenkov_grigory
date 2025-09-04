@@ -13,6 +13,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isAnimatingRef = useRef(false);
   const touchStartY = useRef<number>(0);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const SCROLL_THRESHOLD = 30; // порог колесика
   const TOUCH_THRESHOLD = 80;  // порог для тача
@@ -46,18 +47,51 @@ function App() {
   const goToNext = () => goToSection(currentSectionRef.current + 1);
   const goToPrev = () => goToSection(currentSectionRef.current - 1);
 
-  // Скролл колесом с порогом
+  const handleTransitionEnd = () => {
+    isAnimatingRef.current = false;
+  };
+
+  // Проверка, дошли ли до низа текущей секции
+  const isAtBottom = () => {
+    const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
+    if (!section) return false;
+    return section.scrollTop + section.clientHeight >= section.scrollHeight - 5;
+  };
+
+  // Проверка, вверху ли текущая секция
+  const isAtTop = () => {
+    const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
+    if (!section) return false;
+    return section.scrollTop <= 5;
+  };
+
+  // Скролл колесом
   const handleWheel = (e: WheelEvent) => {
     if (isModalOpen) return;
     e.preventDefault();
-    if (isAnimatingRef.current) return;
+    if (isAnimatingRef.current || Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
 
-    if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
+    const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
+    if (!section) return;
 
-    e.deltaY > 0 ? goToNext() : goToPrev();
+    if (e.deltaY > 0) {
+      // вниз
+      if (isAtBottom()) {
+        goToNext();
+      } else {
+        section.scrollBy({ top: e.deltaY, behavior: 'smooth' });
+      }
+    } else {
+      // вверх
+      if (isAtTop()) {
+        goToPrev();
+      } else {
+        section.scrollBy({ top: e.deltaY, behavior: 'smooth' });
+      }
+    }
   };
 
-  // Скролл тачем с порогом
+  // Скролл тачем
   const handleTouchStart = (e: TouchEvent) => {
     if (isModalOpen) return;
     touchStartY.current = e.touches[0].clientY;
@@ -66,8 +100,18 @@ function App() {
   const handleTouchEnd = (e: TouchEvent) => {
     if (isModalOpen || isAnimatingRef.current) return;
     const diff = touchStartY.current - e.changedTouches[0].clientY;
-    if (Math.abs(diff) > TOUCH_THRESHOLD) {
-      diff > 0 ? goToNext() : goToPrev();
+
+    const section = containerRef.current?.children[currentSectionRef.current] as HTMLElement;
+    if (!section) return;
+
+    if (diff > TOUCH_THRESHOLD) {
+      // свайп вверх → листаем вниз
+      if (isAtBottom()) goToNext();
+      else section.scrollBy({ top: diff, behavior: 'smooth' });
+    } else if (diff < -TOUCH_THRESHOLD) {
+      // свайп вниз → листаем вверх
+      if (isAtTop()) goToPrev();
+      else section.scrollBy({ top: diff, behavior: 'smooth' });
     }
   };
 
@@ -82,10 +126,6 @@ function App() {
     };
   }, [isModalOpen]);
 
-  const handleTransitionEnd = () => {
-    isAnimatingRef.current = false;
-  };
-
   const handleAnchorClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     const sectionIndex = sections.findIndex((section) => section.id === id);
@@ -97,6 +137,7 @@ function App() {
   return (
     <div className={styles.scrollContainer}>
       <div
+        ref={containerRef}
         className={styles.sectionsWrapper}
         style={{ transform: `translateY(-${currentSection * 100}vh)` }}
         onTransitionEnd={handleTransitionEnd}
@@ -106,6 +147,7 @@ function App() {
             key={index}
             id={section.id}
             className={`${styles.section} ${index === currentSection ? styles.active : ''}`}
+            style={{ overflowY: 'auto' }} // важно для скролла внутри секции
           >
             {section.component}
           </div>
