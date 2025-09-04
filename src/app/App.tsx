@@ -4,15 +4,18 @@ import Header from '@/widgets/Header';
 import Menu from '@ui/Menu';
 import About from '@/widgets/About';
 import Skills from '@/widgets/Skills';
+import Portfolio from '@/widgets/Portfolio';
 import styles from './app.module.scss';
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons';
-import Portfolio from '@/widgets/Portfolio';
 
 function App() {
   const [currentSection, setCurrentSection] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState(false); // состояние модалки
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isAnimatingRef = useRef(false);
   const touchStartY = useRef<number>(0);
+
+  const SCROLL_THRESHOLD = 30; // порог колесика
+  const TOUCH_THRESHOLD = 80;  // порог для тача
 
   const sections = [
     { id: 'home', component: <Header key="header" /> },
@@ -43,15 +46,18 @@ function App() {
   const goToNext = () => goToSection(currentSectionRef.current + 1);
   const goToPrev = () => goToSection(currentSectionRef.current - 1);
 
-  // Скролл колесом
+  // Скролл колесом с порогом
   const handleWheel = (e: WheelEvent) => {
-    if (isModalOpen) return; // блокируем секции, если модалка открыта
+    if (isModalOpen) return;
     e.preventDefault();
     if (isAnimatingRef.current) return;
+
+    if (Math.abs(e.deltaY) < SCROLL_THRESHOLD) return;
+
     e.deltaY > 0 ? goToNext() : goToPrev();
   };
 
-  // Скролл тачем
+  // Скролл тачем с порогом
   const handleTouchStart = (e: TouchEvent) => {
     if (isModalOpen) return;
     touchStartY.current = e.touches[0].clientY;
@@ -60,7 +66,7 @@ function App() {
   const handleTouchEnd = (e: TouchEvent) => {
     if (isModalOpen || isAnimatingRef.current) return;
     const diff = touchStartY.current - e.changedTouches[0].clientY;
-    if (Math.abs(diff) > 50) {
+    if (Math.abs(diff) > TOUCH_THRESHOLD) {
       diff > 0 ? goToNext() : goToPrev();
     }
   };
