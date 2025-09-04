@@ -29,6 +29,8 @@ const Skills = () => {
     <section className={styles.wrapper}>
       <div className={styles.container}>
         <SplitTextAnimation text="Skills" delay={0.03} threshold={0.3} />
+
+        {/* Список навыков */}
         <div className={`${styles.container__info} ${showAll ? styles.scrollable : ''}`}>
           {visibleSkills.map((skill: TSkill) => (
             <div
@@ -49,6 +51,7 @@ const Skills = () => {
                   ))}
                 </span>
               </button>
+
               <div className={styles.accordion__content}>
                 <ul>
                   {skill.description.map((desc: string, i: number) => (
